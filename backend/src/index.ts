@@ -1,5 +1,5 @@
 import { Configuration, OpenAIApi } from "openai";
-const dotenv = require('dotenv');
+import dotenv from 'dotenv';
 
 dotenv.config({path: "src/.env"});
 async function listModels(): Promise<void> {
