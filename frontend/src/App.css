@@ -13,15 +13,28 @@
   }
 }
 
-.App-header {
+.dark-mode {
+  background-color: #1b1c1e;
+  color: white;
+}
+
+.light-mode {
   background-color: whitesmoke;
+  color: black;
+}
+
+input[type="text"], textarea {
+  background-color : whitesmoke; 
+  /* Dark Mode #d1d1d1 */
+}
+
+.App-header {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
-  color: white;
 }
 
 .App-link {
