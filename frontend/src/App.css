@@ -50,6 +50,15 @@ input[type="text"], textarea {
   justify-self: flex-start;
   justify-content: flex-end;
 }
+.inputBox {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.submit-button {
+  justify-self: flex-end;
+  align-self: flex-end;
+}
 
 @keyframes App-logo-spin {
   from {
