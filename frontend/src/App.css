@@ -41,6 +41,25 @@ input[type="text"], textarea {
   color: #61dafb;
 }
 
+.toggle-div {
+  width: 98.5%;
+  display: flex;
+  flex-direction: row;
+  align-self: flex-start;
+  align-items: center;
+  justify-self: flex-start;
+  justify-content: flex-end;
+}
+.inputBox {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.submit-button {
+  justify-self: flex-end;
+  align-self: flex-end;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);

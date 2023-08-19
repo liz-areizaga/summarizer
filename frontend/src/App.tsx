@@ -1,15 +1,18 @@
 import React, { useState } from 'react';
 import './App.css';
-import { Box, Button, TextField, InputLabel, Switch, Typography} from '@mui/material';
+import DarkModeIcon from '@mui/icons-material/DarkMode';
+import LightModeIcon from '@mui/icons-material/LightMode';
+import { Box, Button, TextField, Switch} from '@mui/material';
 // import MaterialUISwitch from '../../components/switch/switch';
 
 function App() {
   const [modeFlag, setModeFlag] = useState(true);
+  const [displayText, setDisplayText] = useState("");
 
 
   const handleSubmit = async () => {
-    let toSummarize: string = "Addie had lived in Happyville since she was born. Next week, however, Addie and her family were moving over 1,000 miles away to Washington. Addie despised the idea of moving for many reasons. She was sad to be leaving her best friend. She had played on the soccer team for two years and didn’t want to leave her team. She would not be sleeping in her bedroom, which she loved and had decorated all by herself. She just hated the whole thing. Adie likes cheese.";
-
+    //let toSummarize: string = "Addie had lived in Happyville since she was born. Next week, however, Addie and her family were moving over 1,000 miles away to Washington. Addie despised the idea of moving for many reasons. She was sad to be leaving her best friend. She had played on the soccer team for two years and didn’t want to leave her team. She would not be sleeping in her bedroom, which she loved and had decorated all by herself. She just hated the whole thing. Adie likes cheese.";
+    let toSummarize: string = "Give me a summary: " + (document.getElementById('userInput') as HTMLInputElement).value;
     const options = {
       method: 'POST', 
       headers: {
@@ -25,6 +28,7 @@ function App() {
       const response = await fetch('https://api.openai.com/v1/chat/completions', options);
       const data = await response.json();
       console.log(data.choices[0].message?.content); 
+      setDisplayText(data.choices[0].message?.content);
     } catch (error) {
       console.log(error);
     }
@@ -45,18 +49,22 @@ function App() {
     return (
     <div className="light-mode">
       <div className="App">
+      <div className='toggle-div'>
+          <Switch  inputProps={{ 'aria-label': 'Switch Mode' }} onChange={() => changeMode()}/>
+          {modeFlag && <DarkModeIcon fontSize='small'/>}
+          {!modeFlag && <LightModeIcon fontSize='small'/>}
+        </div>
         <header className="App-header">
-        <Switch inputProps={{ 'aria-label': 'Switch Mode' }} onChange={() => changeMode()}/>
-        <Typography>Change Mode</Typography> 
-
         <Box className='inputLabelBox'>
           <p> Paste Text</p>
-          {/* <InputLabel className="inputLabel">Please paste in your text</InputLabel> */}
         </Box>
-        <Box className='inputBox'>
-            <TextField type="text" id="userInput" name="userInput"/>
-            <div><Button type="submit" value="Submit" onClick={() => handleSubmit()}> Submit </Button></div>
-        </Box>
+        <div className='inputBox'>
+            <Box sx={{ width: 800, maxWidth: '100%',}}>
+              <TextField fullWidth type="text" id="userInput" label='Text to Summarize' name="userInput" multiline rows={4}/>
+            </Box>
+            <div className='submit-button'><Button type="submit" value="Submit" onClick={() => handleSubmit()}> Submit </Button></div>
+        </div>
+        <p>{displayText}</p>
         </header>
       </div>
     </div>
