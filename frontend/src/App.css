@@ -1,3 +1,8 @@
+.text-display {
+  align-items: left;
+  text-align: left;
+}
+
 .App {
   text-align: center;
 }
@@ -58,6 +63,13 @@ input[type="text"], textarea {
 .submit-button {
   justify-self: flex-end;
   align-self: flex-end;
+}
+
+.summary-div {
+  display: flex;
+  width: 800px;
+  justify-content: center;
+  align-items: center;
 }
 
 @keyframes App-logo-spin {
