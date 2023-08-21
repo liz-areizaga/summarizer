@@ -3,11 +3,13 @@ import './App.css';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import LightModeIcon from '@mui/icons-material/LightMode';
 import { Box, Button, TextField, Switch} from '@mui/material';
-// import MaterialUISwitch from '../../components/switch/switch';
+// import { StyledEngineProvider } from '@mui/material/styles';
+import CircularColor from './components/Loading/Loading';
 
 function App() {
   const [modeFlag, setModeFlag] = useState(true);
   const [displayText, setDisplayText] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
 
   const handleSubmit = async () => {
@@ -25,10 +27,12 @@ function App() {
       })
     }
     try {
+      setIsLoading(true);
       const response = await fetch('https://api.openai.com/v1/chat/completions', options);
       const data = await response.json();
       console.log(data.choices[0].message?.content); 
       setDisplayText(data.choices[0].message?.content);
+      setIsLoading(false);
     } catch (error) {
       console.log(error);
     }
@@ -44,27 +48,32 @@ function App() {
         content[0].classList.replace("dark-mode","light-mode");
     }
     setModeFlag(!modeFlag);
+  
   }
   
     return (
     <div className="light-mode">
       <div className="App">
-      <div className='toggle-div'>
+        <div className='toggle-div'>
           <Switch  inputProps={{ 'aria-label': 'Switch Mode' }} onChange={() => changeMode()}/>
           {modeFlag && <DarkModeIcon fontSize='small'/>}
           {!modeFlag && <LightModeIcon fontSize='small'/>}
         </div>
         <header className="App-header">
-        <Box className='inputLabelBox'>
-          <p> Paste Text</p>
-        </Box>
+        <img src="logo1.png" width="250" height="250"/>
         <div className='inputBox'>
             <Box sx={{ width: 800, maxWidth: '100%',}}>
-              <TextField fullWidth type="text" id="userInput" label='Text to Summarize' name="userInput" multiline rows={4}/>
+              <TextField  inputProps = {{style: {color: "white"}}} fullWidth type="text" id="userInput" label='Text to Summarize' name="userInput" multiline rows={4}/>
             </Box>
             <div className='submit-button'><Button type="submit" value="Submit" onClick={() => handleSubmit()}> Submit </Button></div>
         </div>
-        <p>{displayText}</p>
+        <div className='summary-div'>
+          {isLoading ? (
+            <CircularColor/> 
+          ) : (
+            <p className = "text-display">{displayText}</p>
+          )}
+        </div>
         </header>
       </div>
     </div>

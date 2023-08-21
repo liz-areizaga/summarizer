@@ -6,6 +6,7 @@
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@material/button": "^14.0.0",
+    "@material/circular-progress": "^14.0.0",
     "@material/switch": "^14.0.0",
     "@mui/icons-material": "^5.14.3",
     "@mui/material": "^5.14.5",
