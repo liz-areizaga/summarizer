@@ -1,3 +1,7 @@
+/* .textarea {
+  color: whitesmoke;
+} */
+
 .text-display {
   align-items: left;
   text-align: left;
@@ -21,11 +25,13 @@
 .dark-mode {
   background-color: #1b1c1e;
   color: white;
+  /* font-color: white; */
 }
 
 .light-mode {
   background-color: whitesmoke;
   color: black;
+  /* font-color: black; */
 }
 
 input[type="text"], textarea {

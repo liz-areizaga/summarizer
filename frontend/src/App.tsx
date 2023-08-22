@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState, ChangeEvent } from 'react';
 import './App.css';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import LightModeIcon from '@mui/icons-material/LightMode';
@@ -10,6 +10,23 @@ function App() {
   const [modeFlag, setModeFlag] = useState(true);
   const [displayText, setDisplayText] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [userInput,setUserInput] = useState("");
+  // const [data, setdata] = useState({
+  //   transcript: ""
+  // });
+  const [transcript, setTranscript] = useState("");
+
+useEffect(() => {
+  // Using fetch to fetch the api from
+  // flask server it will be redirected to proxy
+  fetch("/data").then((res) =>
+      res.json().then((data) => {
+          // Setting a data from api
+          console.log(data);
+          setTranscript(data.Transcript)
+      })
+  );
+}, []);
 
 
   const handleSubmit = async () => {
@@ -48,7 +65,10 @@ function App() {
         content[0].classList.replace("dark-mode","light-mode");
     }
     setModeFlag(!modeFlag);
-  
+   }
+
+  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setUserInput(event.target.value)
   }
   
     return (
@@ -60,10 +80,14 @@ function App() {
           {!modeFlag && <LightModeIcon fontSize='small'/>}
         </div>
         <header className="App-header">
-        <img src="logo1.png" width="250" height="250"/>
+        {modeFlag && <img src="SummarizerBlack.png" width="200" height="200" alt = "Light mode logo"/>}
+        {!modeFlag && <img src="SummarizerWhite.png" width="200" height="200" alt = "Dark mode logo"/>}
+        <p></p>
+        {/* <p> {transcript}</p> */}
         <div className='inputBox'>
             <Box sx={{ width: 800, maxWidth: '100%',}}>
-              <TextField  inputProps = {{style: {color: "white"}}} fullWidth type="text" id="userInput" label='Text to Summarize' name="userInput" multiline rows={4}/>
+              {modeFlag && <TextField  inputProps = {{style: {color: "black"}}} fullWidth type="text" id="userInput" label='Text to Summarize' name="userInput" multiline rows={4}  value = {userInput} onChange = {handleInputChange}/>}
+              {!modeFlag && <TextField  inputProps = {{style: {color: "white"}}} fullWidth type="text" id="userInput" label='Text to Summarize' name="userInput" multiline rows={4} value = {userInput} onChange = {handleInputChange} focused/>}
             </Box>
             <div className='submit-button'><Button type="submit" value="Submit" onClick={() => handleSubmit()}> Submit </Button></div>
         </div>
