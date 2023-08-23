@@ -1,4 +1,3 @@
-# Import flask and datetime module for showing date and time
 from flask import Flask
 from flask_cors import CORS
 from youtube_transcript_api import YouTubeTranscriptApi
