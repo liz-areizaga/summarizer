@@ -22,6 +22,17 @@
   }
 }
 
+.navBar {
+  display: inline;
+  justify-self: flex-start;
+  align-self: flex-start;
+}
+
+.header {
+  display: flex;
+  flex-direction: row;
+}
+
 .dark-mode {
   background-color: #1b1c1e;
   color: white;

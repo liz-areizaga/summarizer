@@ -3,18 +3,20 @@ import './App.css';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import LightModeIcon from '@mui/icons-material/LightMode';
 import { Box, Button, TextField, Switch} from '@mui/material';
-// import { StyledEngineProvider } from '@mui/material/styles';
 import CircularColor from './components/Loading/Loading';
+import Navbar from './components/Navbar/Navbar'
+import ToggleButton from '@mui/material/ToggleButton';
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+import YouTubeIcon from '@mui/icons-material/YouTube';
+import ContentPasteIcon from '@mui/icons-material/ContentPaste';
 
 function App() {
   const [modeFlag, setModeFlag] = useState(true);
   const [displayText, setDisplayText] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [userInput,setUserInput] = useState("");
-  // const [data, setdata] = useState({
-  //   transcript: ""
-  // });
   const [transcript, setTranscript] = useState("");
+  const [alignment, setAlignment] = React.useState<string | null>('left');
 
 useEffect(() => {
   // Using fetch to fetch the api from
@@ -70,14 +72,28 @@ useEffect(() => {
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     setUserInput(event.target.value)
   }
+
+  const handleAlignment = (
+    event: React.MouseEvent<HTMLElement>,
+    newAlignment: string | null,
+    ) => {
+      if (newAlignment !== null) {
+        setAlignment(newAlignment);
+      }
+  };
   
     return (
+
     <div className="light-mode">
       <div className="App">
-        <div className='toggle-div'>
-          <Switch  inputProps={{ 'aria-label': 'Switch Mode' }} onChange={() => changeMode()}/>
-          {modeFlag && <DarkModeIcon fontSize='small'/>}
-          {!modeFlag && <LightModeIcon fontSize='small'/>}
+        
+        <div className='header'>
+          {/* <div className = 'navBar'><Navbar/></div> */}
+          <div className='toggle-div'>
+            <Switch  inputProps={{ 'aria-label': 'Switch Mode' }} onChange={() => changeMode()}/>
+            {modeFlag && <DarkModeIcon fontSize='small'/>}
+            {!modeFlag && <LightModeIcon fontSize='small'/>}
+          </div>
         </div>
         <header className="App-header">
         {modeFlag && <img src="SummarizerBlack.png" width="200" height="200" alt = "Light mode logo"/>}
@@ -85,9 +101,25 @@ useEffect(() => {
         <p></p>
         {/* <p> {transcript}</p> */}
         <div className='inputBox'>
-            <Box sx={{ width: 800, maxWidth: '100%',}}>
-              {modeFlag && <TextField  inputProps = {{style: {color: "black"}}} fullWidth type="text" id="userInput" label='Text to Summarize' name="userInput" multiline rows={4}  value = {userInput} onChange = {handleInputChange}/>}
-              {!modeFlag && <TextField  inputProps = {{style: {color: "white"}}} fullWidth type="text" id="userInput" label='Text to Summarize' name="userInput" multiline rows={4} value = {userInput} onChange = {handleInputChange} focused/>}
+            <ToggleButtonGroup
+                value={alignment}
+                exclusive
+                onChange={handleAlignment}
+                aria-label="text alignment"
+            >
+                <ToggleButton value="left" aria-label="text" size='small'>
+                  <ContentPasteIcon/>
+                </ToggleButton>
+                <ToggleButton value="right" aria-label="link" size='small'>
+                  <YouTubeIcon/>
+                </ToggleButton>
+            </ToggleButtonGroup>
+            <Box sx={{ width: 800, maxWidth: '100%', mt: 1}}>
+              {modeFlag && !(alignment === 'right') && <TextField  inputProps = {{style: {color: "black"}}} fullWidth type="text" id="userInput" label='Text to Summarize' name="userInput" multiline rows={4}  value = {userInput} onChange = {handleInputChange}/>}
+              {!modeFlag && !(alignment === 'right') && <TextField  inputProps = {{style: {color: "white"}}} fullWidth type="text" id="userInput" label='Text to Summarize' name="userInput" multiline rows={4} value = {userInput} onChange = {handleInputChange} focused/>}
+              {modeFlag && (alignment === 'right') && <TextField  inputProps = {{style: {color: "black"}}} fullWidth type="text" id="userInput" label='Youtube Link' name="userInput" multiline rows={4}  value = {userInput} onChange = {handleInputChange}/>}
+              {!modeFlag && (alignment === 'right') && <TextField  inputProps = {{style: {color: "white"}}} fullWidth type="text" id="userInput" label='Youtube Link' name="userInput" multiline rows={4} value = {userInput} onChange = {handleInputChange} focused/>}
+              {/* {!modeFlag && } */}
             </Box>
             <div className='submit-button'><Button type="submit" value="Submit" onClick={() => handleSubmit()}> Submit </Button></div>
         </div>
