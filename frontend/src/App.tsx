@@ -5,6 +5,7 @@ import DarkModeIcon from '@mui/icons-material/DarkMode';
 import LightModeIcon from '@mui/icons-material/LightMode';
 import { Box, Button, TextField, Switch} from '@mui/material';
 import CircularColor from './components/Loading/Loading';
+
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import YouTubeIcon from '@mui/icons-material/YouTube';
@@ -15,6 +16,8 @@ function App() {
   const [displayText, setDisplayText] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [userInput,setUserInput] = useState("");
+  const [alignment, setAlignment] = React.useState<string | null>('left');
+  const [transcript, setTranscript] = useState("");
   const [alignment, setAlignment] = React.useState<string | null>('left');
 
 
@@ -116,6 +119,7 @@ function App() {
       <div className="App">
         
         <div className='header'>
+
           <div className='toggle-div'>
             <Switch  inputProps={{ 'aria-label': 'Switch Mode' }} onChange={() => changeMode()}/>
             {modeFlag && <DarkModeIcon fontSize='small'/>}
@@ -147,6 +151,7 @@ function App() {
               {!modeFlag && !(alignment === 'right') && <TextField  inputProps = {{style: {color: "white"}}} fullWidth type="text" id="userInput" label='Text to Summarize' name="userInput" multiline rows={4} value = {userInput} onChange = {handleInputChange} focused/>}
               {modeFlag && (alignment === 'right') && <TextField  inputProps = {{style: {color: "black"}}} fullWidth type="text" id="userLink" label='Youtube Link' name="userLink" multiline rows={4}  value = {userInput} onChange = {handleInputChange}/>}
               {!modeFlag && (alignment === 'right') && <TextField  inputProps = {{style: {color: "white"}}} fullWidth type="text" id="userLink" label='Youtube Link' name="userLink" multiline rows={4} value = {userInput} onChange = {handleInputChange} focused/>}
+
             </Box>
             <div className='submit-button'><Button type="submit" value="Submit" onClick={() => handleSubmit()}> Submit </Button></div>
         </div>
