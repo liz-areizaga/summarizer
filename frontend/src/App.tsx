@@ -1,10 +1,11 @@
-import React, { useEffect, useState, ChangeEvent } from 'react';
+import React, { useState, ChangeEvent } from 'react';
+import axios from 'axios';
 import './App.css';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import LightModeIcon from '@mui/icons-material/LightMode';
 import { Box, Button, TextField, Switch} from '@mui/material';
 import CircularColor from './components/Loading/Loading';
-import Navbar from './components/Navbar/Navbar'
+
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import YouTubeIcon from '@mui/icons-material/YouTube';
@@ -15,26 +16,56 @@ function App() {
   const [displayText, setDisplayText] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [userInput,setUserInput] = useState("");
+  const [alignment, setAlignment] = React.useState<string | null>('left');
   const [transcript, setTranscript] = useState("");
   const [alignment, setAlignment] = React.useState<string | null>('left');
 
-useEffect(() => {
-  // Using fetch to fetch the api from
-  // flask server it will be redirected to proxy
-  fetch("/data").then((res) =>
-      res.json().then((data) => {
-          // Setting a data from api
-          console.log(data);
-          setTranscript(data.Transcript)
-      })
-  );
-}, []);
 
+  function getYouTubeVideoIdByUrl(url: string): string{
+    const reg = /^(https?:)?(\/\/)?((www\.|m\.)?youtube(-nocookie)?\.com\/((watch)?\?(feature=\w*&)?vi?=|embed\/|vi?\/|e\/)|youtu.be\/)([\w\-]{10,20})/i
+    const match = url.match(reg);
+    if (match) {
+        return match[9];
+    } else {
+        return "";
+    }
+  }
+
+  const handleLink = async () => {
+    let link: string = (document.getElementById('userLink') as HTMLInputElement).value;
+    let videoID: string = getYouTubeVideoIdByUrl(link);
+    let returnedTranscript: string = "";
+    if (videoID === "") {
+      alert("No Video ID found");
+    } else {
+      try{
+        const response = await axios.get("/data", {
+          params: {
+            id: videoID
+          }
+        });  
+        returnedTranscript = response.data;
+      }
+      catch(error){
+        alert(error);
+        throw error;
+      }
+    }
+    return returnedTranscript;
+  } 
 
   const handleSubmit = async () => {
-    //let toSummarize: string = "Addie had lived in Happyville since she was born. Next week, however, Addie and her family were moving over 1,000 miles away to Washington. Addie despised the idea of moving for many reasons. She was sad to be leaving her best friend. She had played on the soccer team for two years and didn’t want to leave her team. She would not be sleeping in her bedroom, which she loved and had decorated all by herself. She just hated the whole thing. Adie likes cheese.";
-    let toSummarize: string = "Give me a summary: " + (document.getElementById('userInput') as HTMLInputElement).value;
-    const options = {
+    let toSummarize;
+    if (alignment === 'right') { //link 
+      try {
+        toSummarize = await handleLink(); // Wait for the asynchronous operation to complete
+        } catch (error) {
+        alert(error);
+        return;
+      }
+    } else { 
+      toSummarize = "Give me a summary: " +  (document.getElementById('userInput') as HTMLInputElement).value;
+    } const options = {
       method: 'POST', 
       headers: {
         'Authorization': `Bearer ${process.env.REACT_APP_OPENAI_API_KEY}`,
@@ -88,7 +119,7 @@ useEffect(() => {
       <div className="App">
         
         <div className='header'>
-          {/* <div className = 'navBar'><Navbar/></div> */}
+
           <div className='toggle-div'>
             <Switch  inputProps={{ 'aria-label': 'Switch Mode' }} onChange={() => changeMode()}/>
             {modeFlag && <DarkModeIcon fontSize='small'/>}
@@ -99,7 +130,6 @@ useEffect(() => {
         {modeFlag && <img src="SummarizerBlack.png" width="200" height="200" alt = "Light mode logo"/>}
         {!modeFlag && <img src="SummarizerWhite.png" width="200" height="200" alt = "Dark mode logo"/>}
         <p></p>
-        {/* <p> {transcript}</p> */}
         <div className='inputBox'>
             <ToggleButtonGroup
                 value={alignment}
@@ -108,18 +138,20 @@ useEffect(() => {
                 aria-label="text alignment"
             >
                 <ToggleButton value="left" aria-label="text" size='small'>
-                  <ContentPasteIcon/>
+                  {!modeFlag && <ContentPasteIcon sx={{color: "#F5F5F5"}}/>}
+                  {modeFlag && <ContentPasteIcon/>}
                 </ToggleButton>
                 <ToggleButton value="right" aria-label="link" size='small'>
-                  <YouTubeIcon/>
+                  {!modeFlag && <YouTubeIcon sx={{color: "#F5F5F5"}}/>}
+                  {modeFlag && <YouTubeIcon/>}
                 </ToggleButton>
             </ToggleButtonGroup>
             <Box sx={{ width: 800, maxWidth: '100%', mt: 1}}>
               {modeFlag && !(alignment === 'right') && <TextField  inputProps = {{style: {color: "black"}}} fullWidth type="text" id="userInput" label='Text to Summarize' name="userInput" multiline rows={4}  value = {userInput} onChange = {handleInputChange}/>}
               {!modeFlag && !(alignment === 'right') && <TextField  inputProps = {{style: {color: "white"}}} fullWidth type="text" id="userInput" label='Text to Summarize' name="userInput" multiline rows={4} value = {userInput} onChange = {handleInputChange} focused/>}
-              {modeFlag && (alignment === 'right') && <TextField  inputProps = {{style: {color: "black"}}} fullWidth type="text" id="userInput" label='Youtube Link' name="userInput" multiline rows={4}  value = {userInput} onChange = {handleInputChange}/>}
-              {!modeFlag && (alignment === 'right') && <TextField  inputProps = {{style: {color: "white"}}} fullWidth type="text" id="userInput" label='Youtube Link' name="userInput" multiline rows={4} value = {userInput} onChange = {handleInputChange} focused/>}
-              {/* {!modeFlag && } */}
+              {modeFlag && (alignment === 'right') && <TextField  inputProps = {{style: {color: "black"}}} fullWidth type="text" id="userLink" label='Youtube Link' name="userLink" multiline rows={4}  value = {userInput} onChange = {handleInputChange}/>}
+              {!modeFlag && (alignment === 'right') && <TextField  inputProps = {{style: {color: "white"}}} fullWidth type="text" id="userLink" label='Youtube Link' name="userLink" multiline rows={4} value = {userInput} onChange = {handleInputChange} focused/>}
+
             </Box>
             <div className='submit-button'><Button type="submit" value="Submit" onClick={() => handleSubmit()}> Submit </Button></div>
         </div>
