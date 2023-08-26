@@ -33,6 +33,7 @@ function App() {
     let returnedTranscript: string = "";
     if (videoID === "") {
       alert("No Video ID found");
+      return;
     } else {
       try{
         const response = await axios.get("/data", {
