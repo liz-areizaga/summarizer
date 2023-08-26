@@ -17,8 +17,6 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [userInput,setUserInput] = useState("");
   const [alignment, setAlignment] = React.useState<string | null>('left');
-  const [transcript, setTranscript] = useState("");
-  const [alignment, setAlignment] = React.useState<string | null>('left');
 
 
   function getYouTubeVideoIdByUrl(url: string): string{
