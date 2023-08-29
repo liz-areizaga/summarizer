@@ -14,7 +14,6 @@ def get_yt_transcript():
 	video_id = request.args.get('id')
 	transcript_list = YouTubeTranscriptApi.get_transcript(video_id)
 	transcript = ' '.join(item['text'] for item in transcript_list)
-	# transcript = transcript.replace("[Music]","")
 	transcript = re.sub(r'\[[^\]]+\]', "", transcript)
 	transcript = transcript.replace("  "," ")
 	transcript = "No transcript or no words found" if transcript == "" else transcript
