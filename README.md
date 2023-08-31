@@ -3,13 +3,13 @@
 ## The Team
 Our team is uniquely positioned to capitalize in the shift towards the use of online tools in education.
 
-> Jakin Chan 
+#### Jakin Chan 
 - [x] GitHub: https://github.com/JakinChan200
 
-> Nathan Kong
+#### Nathan Kong
 - [x] GitHub: https://github.com/NathanKong06
 
-> Liz:
+#### Lizbeth Areizaga:
 - [x] GitHub: https://github.com/liz-areizaga
 
 
